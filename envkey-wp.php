@@ -25,11 +25,11 @@ function setVars ($envKey, $checks) {
 		$envVars = json_decode($envVars, true);
 		// print_r($envVars);
 		foreach ($envVars as $key => $value) {
-			echo 'assigning ' . $value . ' to ' . $key . '\n';
+			echo '✍️  assigning ' . $value . ' to ' . $key . PHP_EOL;
     	define($key, $value);
 		}
 	} else {
-		echo 'JSON is invalid\n';
+		echo '🚫  json is invalid' . PHP_EOL;
 	}
 }
 
