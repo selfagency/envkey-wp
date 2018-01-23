@@ -1,4 +1,4 @@
-require_once(ABSPATH . 'envkey-wp.php');\n<?php
+<?php
 /**
  * Custom WordPress configurations on "wp-config.php" file.
  *

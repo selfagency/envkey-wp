@@ -1,4 +1,5 @@
 <?php
+require_once('./checks.php');
 
 // settings
 $mode = 'comment';
@@ -8,15 +9,14 @@ $wpBase = '/Dev/envkey-wp/';
 // paths
 $siteBase = $_SERVER['HOME'] . $siteBase;
 $wpBase = $_SERVER['HOME'] . $wpBase;
-$envFile = $siteBase . '/.env';
+$envFile = $siteBase . '.env';
 
 // wp-config
 $configFile = $wpBase . '/wp-config.php';
 $wpConfig = file_get_contents($configFile);
 
-// envkey
-$envkeyMap = $wpBase . '/envkey-wp.php';
-$envkeyLink = 'require_once(ABSPATH . \'envkey-wp.php\');';
+// checks
+$checks = checks($envFile, $configFile, $wpConfig);
 
 function getKey ($env) {
 	$envData = fopen($env, 'r');

@@ -2,10 +2,14 @@
 require_once('./common.php');
 $envKey = getKey($envFile);
 
-function getVars ($key) {
+function getVars ($key, $checks) {
 	// exec envkey return json
-	$envVars = exec('envkey-fetch ' . $key);
-	return $envVars;
+	if ($checks) {
+		$envVars = exec('envkey-fetch ' . $key);
+		return $envVars;
+	} else {
+		return null;
+	}
 }
 
 function isJson ($str) {
@@ -14,9 +18,9 @@ function isJson ($str) {
   return (json_last_error() == JSON_ERROR_NONE);
 }
 
-function setVars ($envKey) {
+function setVars ($envKey, $checks) {
 	// for each key in array -> define(key, value); if key exists in wp-config, delete
-	$envVars = getVars($envKey);
+	$envVars = getVars($envKey, $checks);
 	if (isJson($envVars)) {
 		$envVars = json_decode($envVars, true);
 		// print_r($envVars);
@@ -29,4 +33,4 @@ function setVars ($envKey) {
 	}
 }
 
-setVars($envKey);
+setVars($envKey, $checks);

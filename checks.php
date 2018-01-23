@@ -1,7 +1,5 @@
 <?php
-function checks() {
-  require_once('./common.php');
-
+function checks($envFile, $configFile, $wpConfig) {
   // check if envkey-fetch is installed
   exec('which envkey-fetch', $which);
   if ($which != null && $which[0] != null) {
@@ -40,10 +38,11 @@ function checks() {
     if (is_writable($configFile)) {
       $check06 = true;
       // envkey is linked
+      $envkeyLink = 'require_once(ABSPATH . \'envkey-wp.php\');\n';
       if (strpos(file_get_contents($configFile), $envkeyLink) !== false) {
         $check07 = true;
       } else {
-        $wpConfig = $envkeyLink . '\n' . $wpConfig;
+        $wpConfig = $envkeyLink . $wpConfig;
         file_put_contents($configFile, $wpConfig);
         $check07 = true;
       }
