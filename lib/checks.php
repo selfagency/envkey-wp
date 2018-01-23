@@ -1,5 +1,9 @@
 <?php
-function checks($envFile, $configFile, $wpConfig, $envkeyLink) {
+require_once('./utility');
+
+function checks($envFile, $configFile, $wpConfig, $envkeyLink, $output) {
+  $htmlOut = '<ul>' . PHP_EOL;
+
   // check if envkey-fetch is installed
   exec('which envkey-fetch', $which);
   if ($which != null && $which[0] != null) {
@@ -7,7 +11,7 @@ function checks($envFile, $configFile, $wpConfig, $envkeyLink) {
   } else {
     $check01 = false;
   };
-  echo ($check01 ? '✅' : '🚫') . '  envkey-fetch is installed' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check01 ? '✅' : '🚫') . '  envkey-fetch is installed</li>' . PHP_EOL;
 
   // check if .env file exists with envkey field
   if (file_exists($envFile)) {
@@ -26,9 +30,9 @@ function checks($envFile, $configFile, $wpConfig, $envkeyLink) {
   } else {
     $check02 = false;
   };
-  echo ($check02 ? '✅' : '🚫') . '  .env exists' . PHP_EOL;
-  echo ($check03 ? '✅' : '🚫') . '  envkey field exists' . PHP_EOL;
-  echo ($check04 ? '✅' : '🚫') . '  environment key exists' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check02 ? '✅' : '🚫') . '  .env exists</li>' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check03 ? '✅' : '🚫') . '  envkey field exists</li>' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check04 ? '✅' : '🚫') . '  environment key exists</li>' . PHP_EOL;
 
   // check if envkey file is linked in wp-config.php
   // file exists
@@ -49,9 +53,10 @@ function checks($envFile, $configFile, $wpConfig, $envkeyLink) {
   } else {
     $check05 = false;
   }
-  echo ($check05 ? '✅' : '🚫') . '  wp-config.php exists' . PHP_EOL;
-  echo ($check06 ? '✅' : '🚫') . '  wp-config.php is writable' . PHP_EOL;
-  echo ($check07 ? '✅' : '🚫') . '  envkey is linked to wp-config.php' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check05 ? '✅' : '🚫') . '  wp-config.php exists</li>' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check06 ? '✅' : '🚫') . '  wp-config.php is writable</li>' . PHP_EOL;
+  $htmlOut = $htmlOut . '<li>' . ($check07 ? '✅' : '🚫') . '  envkey is linked to wp-config.php</li>' . PHP_EOL;
+  $htmlOut = $htmlOut . '</ul>';
 
   if ($check01 && $check02 && $check03 && $check04 && $check05 && $check06 && $check07) {
     $checks = true;
@@ -59,5 +64,9 @@ function checks($envFile, $configFile, $wpConfig, $envkeyLink) {
     $checks = false;
   }
 
-  return $checks;
+  if ($outout === true) {
+    return $htmlOut;
+  } else {
+    return $checks;
+  }
 }

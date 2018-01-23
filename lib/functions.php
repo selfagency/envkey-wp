@@ -1,11 +1,25 @@
 <?php
-require_once('./common.php');
-$envKey = getKey($envFile);
+require_once('./utility');
+
+// get the envkey key
+function getKey ($env) {
+	$envData = fopen($env, 'r');
+	while (!feof($envData)) {
+		$currLine = fgets($envData);
+  	if (strpos($currLine, 'ENVKEY') !== false) {
+			$envKey = explode('=', $currLine)[1];
+			return $envKey;
+		} else {
+			return null;
+		}
+  }
+	fclose($envData);
+}
 
 // require envkey-wp.php in wp-config.php
 function editConfig ($configFile, $envkeyLink) {
 	if (strpos(file_get_contents($configFile), $envkeyLink) === false) {
-		echo '🔗  linking envkey-wp.php to wp-config.php' . PHP_EOL;
+		echo '<li>🔗  linking envkey-wp.php to wp-config.php</li>' . PHP_EOL;
 		$wpConfig = file($configFile, FILE_IGNORE_NEW_LINES);
 		$target = 'require_once(ABSPATH . \'wp-settings.php\');';
 		$offset = array_search($target, $wpConfig) -1;
@@ -36,20 +50,20 @@ function killKey ($deleteMode, $configFile, $key) {
 		$fileOut = file($configFile);
 
 		if ($deleteMode) {
-			echo '🗑  erasing ' . $key . ' from wp-config.php' . PHP_EOL;
+			echo '<li>🗑  erasing ' . $key . ' from wp-config.php</li>' . PHP_EOL;
 			unset($fileOut[$lineNumber]);
 		} else {
 			if (isComment($fileOut[$lineNumber]) === false) {
-				echo '🕶  disabling ' . $key . ' in wp-config.php' . PHP_EOL;
+				echo '<li>🕶  disabling ' . $key . ' in wp-config.php</li>' . PHP_EOL;
 				$fileOut[$lineNumber] = '// ' . $fileOut[$lineNumber];
 			} else {
-				echo '🕶  ' . $key . ' is disabled in wp-config.php' . PHP_EOL;
+				echo '<li>🕶  ' . $key . ' is disabled in wp-config.php</li>' . PHP_EOL;
 			}
 		}
 
 		file_put_contents($configFile, implode('', $fileOut));
 	} else {
-		echo '🔑  ' . $key . ' does not exist in wp-config.php' . PHP_EOL;
+		echo '<li>🔑  ' . $key . ' does not exist in wp-config.php</li>' . PHP_EOL;
 	}
 }
 
@@ -70,13 +84,11 @@ function setVars ($envKey, $checks, $deleteMode, $configFile, $siteBase) {
 		$envVars = json_decode($envVars, true);
 		// print_r($envVars);
 		foreach ($envVars as $key => $value) {
-			echo '✍️  assigning ' . $value . ' to ' . $key . PHP_EOL;
+			echo '<li>✍️  assigning ' . $key . '</li>' . PHP_EOL;
     	define($key, $value);
 			killKey ($deleteMode, $configFile, $key);
 		}
 	} else {
-		echo '🚫  json is invalid' . PHP_EOL;
+		echo '<li>🚫  envkey output is invalid</li>' . PHP_EOL;
 	}
 }
-
-setVars($envKey, $checks, $deleteMode, $configFile, $siteBase);
