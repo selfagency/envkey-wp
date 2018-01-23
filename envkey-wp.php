@@ -54,9 +54,9 @@ function killKey ($deleteMode, $configFile, $key) {
 }
 
 // exec envkey and return json
-function getVars ($key, $checks) {
+function getVars ($key, $checks, $siteBase) {
 	if ($checks) {
-		$envVars = exec('envkey-fetch ' . $key);
+		$envVars = exec('envkey-fetch --cache --cache-dir ' . $siteBase . '.envkey/cache ' . $key);
 		return $envVars;
 	} else {
 		return null;
@@ -64,8 +64,8 @@ function getVars ($key, $checks) {
 }
 
 // for each key in array -> define(key, value); if key exists in wp-config, delete or comment out
-function setVars ($envKey, $checks, $deleteMode, $configFile) {
-	$envVars = getVars($envKey, $checks);
+function setVars ($envKey, $checks, $deleteMode, $configFile, $siteBase) {
+	$envVars = getVars($envKey, $checks, $siteBase);
 	if (isJson($envVars)) {
 		$envVars = json_decode($envVars, true);
 		// print_r($envVars);
@@ -79,4 +79,4 @@ function setVars ($envKey, $checks, $deleteMode, $configFile) {
 	}
 }
 
-setVars($envKey, $checks, $deleteMode, $configFile);
+setVars($envKey, $checks, $deleteMode, $configFile, $siteBase);

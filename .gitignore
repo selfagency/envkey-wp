@@ -1,3 +1,4 @@
 .env
+.envkey/
 vendor/
 wp-config.php
