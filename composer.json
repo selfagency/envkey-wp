@@ -1,0 +1,16 @@
+{
+  "name": "selfagency/envkey-wp",
+  "description": "Integrate EnvKey with WordPress to manage wp-config.php variables and more.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Sieradski",
+      "email": "daniel@self.agency"
+    }
+  ],
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=5.3.2",
+    "composer/installers": "v1.0.6"
+  }
+}
