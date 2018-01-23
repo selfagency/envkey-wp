@@ -11,7 +11,7 @@ $envFile = $siteBase . '.env';
 // wp-config
 $configFile = $wpBase . '/wp-config.php';
 $wpConfig = file_get_contents($configFile);
-$envkeyLink = 'require_once(ABSPATH . \'envkey-wp.php\');';
+$envkeyLink = 'require_once(dirname(__FILE__) . \'/envkey-wp.php\');';
 
 // checks
 $checks = checks($envFile, $configFile, $wpConfig, $envkeyLink);
