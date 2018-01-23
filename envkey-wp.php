@@ -18,7 +18,7 @@ function isJson ($str) {
   return (json_last_error() == JSON_ERROR_NONE);
 }
 
-function setVars ($envKey, $checks) {
+function setVars ($envKey, $checks, $deleteMode, $configFile) {
 	// for each key in array -> define(key, value); if key exists in wp-config, delete
 	$envVars = getVars($envKey, $checks);
 	if (isJson($envVars)) {
@@ -27,10 +27,11 @@ function setVars ($envKey, $checks) {
 		foreach ($envVars as $key => $value) {
 			echo '✍️  assigning ' . $value . ' to ' . $key . PHP_EOL;
     	define($key, $value);
+			killKey ($deleteMode, $configFile, $key);
 		}
 	} else {
 		echo '🚫  json is invalid' . PHP_EOL;
 	}
 }
 
-setVars($envKey, $checks);
+setVars($envKey, $checks, $deleteMode, $configFile);
